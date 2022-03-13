@@ -27,8 +27,9 @@ class DatabaseSeeder extends Seeder
         $user = User::create([
             'name' => 'Juan Casillas',
             'email' => 'jns_asv@hotmail.com',
-            'password' => Hash::make('password'),
-            'id_status' => 1
+            'password' => '$2y$10$HAMwue.6dmIRk3ghCOf02upe7NMX3cJnzp5wTwqmDUXZefdLdCrqe',
+            'id_status' => 1,
+            'email_verified_at' => now()
         ]);
 
         DB::table('users_roles')->insert(
@@ -36,9 +37,5 @@ class DatabaseSeeder extends Seeder
             'id_user'=>1,
             'id_role'=>1
         ]);
-
-        event(new Registered($user));
-
-
     }
 }
