@@ -16,7 +16,7 @@
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     Dashboard
                 </x-nav-link>
-                <x-nav-link :href="route('role-index')" :active="request()->routeIs('role-index')">
+                <x-nav-link :href="route('crud.index',['model'=>'role'])" :active="request()->routeIs('crud.index')">
                     Roles
                 </x-nav-link>
             </ul>

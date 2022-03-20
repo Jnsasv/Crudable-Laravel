@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CrudController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,10 +22,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-
-Route::controller(RoleController::class)->group(function(){
-    Route::get('/role','index')->name('role');
+Route::prefix('admin')->middleware(['auth'])->group(function(){
+    //TODO: agregar role pertinente
+    Route::prefix('crud')->name('crud.') ->middleware(['auth'])->controller(CrudController::class)->group(function(){
+        Route::get('{model}/','index')->name('index');
+        Route::get('{model}/create','create');
+        Route::get('{model}/edit/{id}','edit');
+    });
 });
+
 
 
 require __DIR__.'/auth.php';

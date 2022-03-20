@@ -42,4 +42,23 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public $display_names = [
+        'name'=>'Nombre',
+        'email'=>'Descripción',
+        'id_status' =>'Estátus'
+    ];
+
+    public $editable_fields = [
+        'name',
+        'email',
+        'id_status'
+    ];
+
+    public $creatable_fields =[
+        'name',
+        'email',
+        'id_status'
+    ];
 }
