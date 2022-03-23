@@ -8,6 +8,8 @@ class Model2 extends Model
 {
     public $model_name ='';
 
+    public $model_display_name ='';
+
     public $actions =[];
 
     public $display_names = [];
@@ -23,4 +25,8 @@ class Model2 extends Model
     public $viewBag =[];
 
     public $create_mode = false;
+
+    public $update_rules =[];
+
+    public $store_rules =[];
 }
