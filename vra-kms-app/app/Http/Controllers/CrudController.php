@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
-use App\Models\Model2;
+use App\Models\Crudable;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
@@ -57,18 +57,18 @@ class CrudController extends Controller
      * @param  \App\Http\Requests\StoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request)
+    public function store(string $model,  StoreRequest $request)
     {
-        //
+        return $request;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Model2  $model
+     * @param  \App\Models\Crudable  $model
      * @return \Illuminate\Http\Response
      */
-    public function show(Model2 $model)
+    public function show(Crudable $model)
     {
 
     }
@@ -76,7 +76,7 @@ class CrudController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Model2  $role
+     * @param  \App\Models\Crudable  $role
      * @return \Illuminate\Http\Response
      */
     public function edit(string $model,int $id)
@@ -91,21 +91,21 @@ class CrudController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateRoleRequest  $request
-     * @param  \App\Models\Model2  $model
+     * @param  \App\Models\Crudable  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $request, Model2 $model)
+    public function update(string $model,UpdateRequest $request, Crudable $data)
     {
-        //
+        return $request;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Model2  $role
+     * @param  \App\Models\Crudable  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Model2 $role)
+    public function destroy(Crudable $role)
     {
         //
     }

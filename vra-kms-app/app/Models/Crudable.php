@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Model2 extends Model
+class Crudable extends Model
 {
     public $model_name ='';
 

@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Role extends Model2
+class Role extends Crudable
 {
     use HasFactory,SoftDeletes;
 
-    public $model_name ='Roles';
+    public $model_name ='role';
+
+    public $model_display_name ='Roles2';
 
     public $actions = [
         'create' =>true,
@@ -51,6 +53,19 @@ class Role extends Model2
         'desc'=>'textarea',
         'status.name'=> 'select'
     ];
+
+    public $update_rules =[
+        'name' => 'required|min:3|max:50',
+        'desc'  => 'required|min:3|max:50',
+        'status'  => 'required'
+    ];
+
+    public $store_rules =[
+        'name' => 'required|min:3|max:50',
+        'desc'  => 'required|min:3|max:50',
+        'status'  => 'required'
+    ];
+
     /**
      * Get the status that owns the Role
      *

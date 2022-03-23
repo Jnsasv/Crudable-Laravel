@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Crudable;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -10,7 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
-class User extends Model2 implements
+class Authenticable extends Crudable implements
     AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract
