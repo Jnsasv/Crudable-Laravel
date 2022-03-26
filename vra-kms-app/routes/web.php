@@ -28,6 +28,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function(){
         Route::get('{model}/','index')->name('index');
         Route::get('{model}/create','create');
         Route::get('{model}/edit/{id}','edit');
+        Route::put('{model}/update','update');
+        Route::post('{model}/store','store');
     });
 });
 

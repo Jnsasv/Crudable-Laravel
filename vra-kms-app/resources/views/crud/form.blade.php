@@ -10,8 +10,12 @@
                     </h5>
                 </div>
 
-                <form class="mt-3" action="{{ $model->create_mode ? 'Post' : 'Put' }}">
+                <form class="mt-3" novalidate id="crud-form" action="post">
                     @csrf
+                    @if (!$model->create_mode)
+                        @method('put')
+                    @endif
+                    <input type="hidden" name="id" value="{{$model->create_mode? 0 : $model->id}}"/>
                     @foreach ($model->create_mode ? $model->editable_fields : $model->creatable_fields as $key => $item)
                         @php
                             $keys = explode('.', $item);
@@ -23,16 +27,16 @@
                             @switch($model->field_types[$item])
                                 @case('text')
                                     <input name="{{ $item }}" type="text" class="form-control"
-                                        id="{{ $item }}" value="{{ $model[$item] }}">
+                                        id="{{ $item }}" value="{{ $model[$item] }}" aria-describedby= "errors-{{$keys[0]}}"/>
                                 @break
 
                                 @case('textarea')
                                     <textarea name="{{ $item }}" class="form-control" id="{{ $item }}"
-                                        rows="3"> {{ $model[$item] }}</textarea>
+                                        rows="3" aria-describedby= "errors-{{$keys[0]}}"> {{ $model[$item] }}</textarea>
                                 @break
 
                                 @case('select')
-                                    <select name="{{ $keys[0] }}" class="form-control" id="{{ $keys[0] }}">
+                                    <select name="{{ $keys[0] }}" class="form-control" id="{{ $keys[0] }}" aria-describedby= "errors-{{$keys[0]}}">
                                         <option disabled value="" {{ $model->create_mode ? 'selected' : '' }}>Seleccione una opción
                                         </option>
                                         @if (count($keys) > 1 && isset($viewBag[$keys[0]]) && $keys[0] != 'status')
@@ -55,7 +59,7 @@
 
                                     @default
                                 @endswitch
-
+                                <div id="errors-{{$keys[0]}}" class="invalid-feedback"></div>
 
                             </div>
                         @endforeach

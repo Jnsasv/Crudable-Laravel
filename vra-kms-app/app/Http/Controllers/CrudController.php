@@ -59,18 +59,9 @@ class CrudController extends Controller
      */
     public function store(string $model,  StoreRequest $request)
     {
-        return $request;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Crudable  $model
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Crudable $model)
-    {
-
+        $data = $this->instance->renameRequestParams($request->all());
+        $model= $this->instance->create($data);
+        return $model;
     }
 
     /**
@@ -81,7 +72,7 @@ class CrudController extends Controller
      */
     public function edit(string $model,int $id)
     {
-        $model =  $this->model_name::find($id);
+        $model =  $this->model_name::findOrFail($id);
 
         return view('crud.form',['model'=> $model , 'viewBag' => $this->getViewbag()]);
 
@@ -94,9 +85,13 @@ class CrudController extends Controller
      * @param  \App\Models\Crudable  $model
      * @return \Illuminate\Http\Response
      */
-    public function update(string $model,UpdateRequest $request, Crudable $data)
+    public function update(string $model,UpdateRequest $request)
     {
-        return $request;
+        $data = $this->instance->renameRequestParams($request->all());
+        $model =  $this->model_name::findOrFail($request->id);
+        $model->update($data);
+
+        return $model;
     }
 
     /**

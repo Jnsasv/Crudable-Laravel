@@ -29,4 +29,14 @@ class Crudable extends Model
     public $update_rules =[];
 
     public $store_rules =[];
+
+    public function renameRequestParams (array $params){
+        foreach ($params as $key => $param) {
+            if(!in_array($key,$this->fillable) && in_array('id_'.$key,$this->fillable)){
+                $params['id_'.$key] = $param;
+                unset($params[$key]);
+            }
+        }
+        return $params;
+    }
 }
