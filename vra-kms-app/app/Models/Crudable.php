@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Crudable extends Model
 {
+    use SoftDeletes;
+
     public $model_name ='';
 
     public $model_display_name ='';
@@ -38,5 +41,12 @@ class Crudable extends Model
             }
         }
         return $params;
+    }
+
+    public function delete()
+    {
+        $this->id_status =3;
+        $this->save();
+        parent::delete();
     }
 }

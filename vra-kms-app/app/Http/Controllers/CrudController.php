@@ -37,7 +37,7 @@ class CrudController extends Controller
      */
     public function index()
     {
-        return view('crud.index',['data' =>$this->model_name::with($this->instance->withs)->paginate(10), 'model' =>$this->instance ]);
+        return view('crud.index',['data' =>$this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' =>$this->instance ]);
     }
 
     /**
@@ -94,15 +94,42 @@ class CrudController extends Controller
         return $model;
     }
 
+    public function delete(string $model,int $id){
+        $model =  $this->model_name::findOrFail($id);
+        return view('crud.confirm',['model'=> $model]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Crudable  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Crudable $role)
+    public function destroy(string $model ,Request $request)
     {
-        //
+        $model =  $this->model_name::findOrFail($request->id);
+        $model->delete();
+        return $model;
+    }
+
+    public function reactivate(string $model,int $id){
+        $model =  $this->model_name::withTrashed()->find($id);
+        return view('crud.confirm',['model'=> $model,'reactivate'=>true]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Crudable  $role
+     * @return \Illuminate\Http\Response
+     */
+    public function activate(string $model ,Request $request)
+    {
+        $model =  $this->model_name::withTrashed()->find($request->id);
+        $model->deleted_at = null;
+        $model->id_status = 1;
+        $model->save();
+        return $model;
     }
 
     protected function getViewbag(){

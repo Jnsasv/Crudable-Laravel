@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Crudable
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
 
     public $model_name ='role';
 
-    public $model_display_name ='Roles2';
+    public $model_display_name ='Roles';
 
     public $actions = [
         'create' =>true,

@@ -1,14 +1,13 @@
 @if ($create)
-
-<div class="py-1">
-    <div class="card">
-        <div class="card-body">
-            <button class="btn btn-primary" type="button" onclick="createRecord()">
-                <i class="fa-solid fa-circle-plus"></i> Nuevo
-            </button>
+    <div class="py-1">
+        <div class="card">
+            <div class="card-body">
+                <button class="btn btn-primary" type="button" onclick="createRecord()">
+                    <i class="fa-solid fa-circle-plus"></i> Nuevo
+                </button>
+            </div>
         </div>
     </div>
-</div>
 @endif
 <div class="py-3">
     <div class="card">
@@ -24,23 +23,30 @@
                         <tr>
                             @foreach ($model->display_names as $key => $value)
                                 @php
-                                    $key = explode('.',$key);
+                                    $key = explode('.', $key);
                                 @endphp
-                                 @if (count($key)==1 )
-                                 <td>{{$row[$key[0]]}}</td>
-                                 @else
-                                 <td>{{$row[$key[0]][$key[1]]}}</td>
+                                @if (count($key) == 1)
+                                    <td>{{ $row[$key[0]] }}</td>
+                                @else
+                                    <td>{{ $row[$key[0]][$key[1]] }}</td>
                                 @endif
                             @endforeach
                             <td>
-                                @if ($update)
-                                    <x-table-button class="fa-pen-to-square" onclick="editRecord({{$row->id}})"></x-table-button>
-                                @endif
+                                @if ($row->id_status == 3)
+                                    <x-table-button class="fa-power-off" onclick="confirmReActivate({{ $row->id }})">
+                                    </x-table-button>
+                                @else
+                                    @if ($update)
+                                        <x-table-button class="fa-pen-to-square"
+                                            onclick="editRecord({{ $row->id }})"></x-table-button>
+                                    @endif
 
-                                @if ($delete)
-                                    <x-table-button class="fa-trash-can" onclick="confirmDelete({{$row->id}})"></x-table-button>
+                                    @if ($delete)
+                                        <x-table-button class="fa-trash-can"
+                                            onclick="confirmDelete({{ $row->id }})"></x-table-button>
+                                    @endif
+                                    {{ $options ?? '' }}
                                 @endif
-                                {{$options??''}}
                             </td>
 
                         </tr>
