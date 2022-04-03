@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Role extends Crudable
 {
@@ -32,15 +31,15 @@ class Role extends Crudable
     ];
 
     public $editable_fields = [
-        'name',
-        'desc',
-        'status.name'
+        'name'=>'Nombre',
+        'desc'=>'Descripción',
+        'status.name' =>'Estátus'
     ];
 
     public $creatable_fields =[
-        'name',
-        'desc',
-        'status.name'
+        'name'=>'Nombre',
+        'desc'=>'Descripción',
+        'status.name' =>'Estátus'
     ];
 
     public $withs = ['status'];
@@ -65,14 +64,8 @@ class Role extends Crudable
         'status'  => 'required'
     ];
 
-    /**
-     * Get the status that owns the Role
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function status(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(Status::class, 'id_status', 'id');
+        return $this->belongsToMany(User::class);
     }
-
 }

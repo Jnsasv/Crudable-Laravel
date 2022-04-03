@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
-use App\Models\Crudable;
+use App\Models\AdminUser;
+use App\Models\AppUser;
 use App\Models\Status;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,9 @@ class CrudController extends Controller
 
     public static $available_models = [
         'role'=> Role::class,
-        'status'=> Status::class
+        'status'=> Status::class,
+        'adminuser'=> AdminUser::class,
+        'appuser' =>AppUser::class
 
     ];
 
@@ -60,7 +63,11 @@ class CrudController extends Controller
     public function store(string $model,  StoreRequest $request)
     {
         $data = $this->instance->renameRequestParams($request->all());
-        $model= $this->instance->create($data);
+        $model =  new $this->model_name();
+        $model= $model->fill($data);
+        $model->beforeStore();
+        $model->save();
+        $model->afterStore();
         return $model;
     }
 
@@ -89,8 +96,9 @@ class CrudController extends Controller
     {
         $data = $this->instance->renameRequestParams($request->all());
         $model =  $this->model_name::findOrFail($request->id);
+        $model->beforeUpdate();
         $model->update($data);
-
+        $model->afterUpdate();
         return $model;
     }
 
@@ -108,7 +116,9 @@ class CrudController extends Controller
     public function destroy(string $model ,Request $request)
     {
         $model =  $this->model_name::findOrFail($request->id);
+        $model->beforeDestroy();
         $model->delete();
+        $model->afterDestroy();
         return $model;
     }
 

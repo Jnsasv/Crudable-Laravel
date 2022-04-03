@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Crudable extends Model
@@ -49,4 +50,43 @@ class Crudable extends Model
         $this->save();
         parent::delete();
     }
+
+    public function beforeStore(){
+
+    }
+
+    public function afterStore(){
+
+    }
+
+    public function beforeUpdate(){
+
+    }
+    public function afterUpdate(){
+
+    }
+
+    public function beforeDestroy(){
+
+    }
+
+    public function afterDestroy()
+    {
+
+    }
+
+    public function headerXtraButtons(){
+
+    }
+
+    public function tableXtraButtons(){
+    }
+
+    public $xtraScripts = false;
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class, 'id_status', 'id');
+    }
+
 }

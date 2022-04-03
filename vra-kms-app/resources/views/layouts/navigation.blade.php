@@ -19,29 +19,33 @@
                 <x-nav-link :href="route('crud.index',['model'=>'role'])" :active="request()->routeIs('crud.index')">
                     Roles
                 </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'adminuser'])" :active="request()->routeIs('crud.index')">
+                    Admins
+                </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'appuser'])" :active="request()->routeIs('crud.index')">
+                    Usuarios
+                </x-nav-link>
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav">
-                <x-dropdown align="left">
-                    <x-slot name="trigger">
-                        {{ Auth::user()->name }}
-                    </x-slot>
+                    <x-dropdown align="left">
+                        <x-slot name="trigger">
+                            {{ Auth::user()->name }}
+                        </x-slot>
 
-                    <x-slot name="content">
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                        <x-slot name="content">
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
 
-                            <x-dropdown-link class="dropdown-item"
-                             :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                <x-dropdown-link class="dropdown-item" :href="route('logout')" onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </ul>
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                </ul>
             </div>
         </div>
     </div>

@@ -1,14 +1,15 @@
-@if ($create)
-    <div class="py-1">
-        <div class="card">
-            <div class="card-body">
-                <button class="btn btn-primary" type="button" onclick="createRecord()">
-                    <i class="fa-solid fa-circle-plus"></i> Nuevo
-                </button>
+<div class="py-1">
+    <div class="card">
+        <div class="card-body">
+                @if ($create)
+                    <button class="btn btn-primary" type="button" onclick="createRecord()">
+                        <i class="fa-solid fa-circle-plus"></i> Nuevo
+                    </button>
+                @endif
+                {{$model->headerXtraButtons()}}
             </div>
         </div>
     </div>
-@endif
 <div class="py-3">
     <div class="card">
         <div class="card-body">
@@ -45,7 +46,9 @@
                                         <x-table-button class="fa-trash-can"
                                             onclick="confirmDelete({{ $row->id }})"></x-table-button>
                                     @endif
-                                    {{ $options ?? '' }}
+
+                                    {{$row->tableXtraButtons()}}
+
                                 @endif
                             </td>
 
@@ -54,8 +57,6 @@
                 </tbody>
             </table>
             {{ $info->links() }}
-
-
         </div>
     </div>
 </div>

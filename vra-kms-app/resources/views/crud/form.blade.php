@@ -17,23 +17,23 @@
                     @endif
                     <input type="hidden" name="id" value="{{ $model->create_mode ? 0 : $model->id }}" />
                     @foreach ($model->create_mode ? $model->editable_fields : $model->creatable_fields as $key => $item)
-                        @php
-                            $keys = explode('.', $item);
+                         @php
+                            $keys = explode('.', $key);
                         @endphp
                         <div class="mb-3">
-                            <label for="{{ count($keys) > 1 ? $keys[0] : $item }}"
-                                class="form-label">{{ $model->display_names[$item] }}</label>
+                            <label for="{{ count($keys) > 1 ? $keys[0] : $key }}"
+                                class="form-label">{{ $item }}</label>
 
-                            @switch($model->field_types[$item])
+                            @switch($model->field_types[$key])
                                 @case('text')
-                                    <input name="{{ $item }}" type="text" class="form-control"
-                                        id="{{ $item }}" value="{{ $model[$item] }}"
+                                    <input name="{{ $key }}" type="text" class="form-control"
+                                        id="{{ $key }}" value="{{ $model[$key] }}"
                                         aria-describedby="errors-{{ $keys[0] }}" />
                                 @break
 
                                 @case('textarea')
-                                    <textarea name="{{ $item }}" class="form-control" id="{{ $item }}" rows="3"
-                                        aria-describedby="errors-{{ $keys[0] }}"> {{ $model[$item] }}</textarea>
+                                    <textarea name="{{ $key }}" class="form-control" id="{{ $key }}" rows="3"
+                                        aria-describedby="errors-{{ $keys[0] }}"> {{ $model[$key] }}</textarea>
                                 @break
 
                                 @case('select')

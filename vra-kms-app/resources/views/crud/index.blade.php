@@ -7,10 +7,10 @@
         <x-table :info="$data" :create="$model->actions['create']" :update="$model->actions['update']" :delete="$model->actions['delete']">
         </x-table>
     </div>
+    <script> var model = <?php echo json_encode($model->model_name); ?> ; </script>
+        <script src="{{ asset('js/crud.js') }}"></script>
 
-    <script>
-        var model = <?php echo json_encode($model->model_name); ?> ;
-    </script>
-    <script src="{{ asset('js/crud.js') }}"></script>
-
+        @if ($model->xtraScripts)
+            <script src="{{asset($model->xtraScripts)}}"></script>
+        @endif
 </x-app-layout>
