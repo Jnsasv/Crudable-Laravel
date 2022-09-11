@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticable implements MustVerifyEmail
 {
@@ -43,32 +43,32 @@ class User extends Authenticable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public $model_name ='user';
+    public $model_name = 'user';
 
-    public $model_display_name ='Usuarios';
+    public $model_display_name = 'Usuarios';
 
     public $actions = [
-        'create' =>true,
-        'update' =>true,
-        'delete' =>true,
+        'create' => true,
+        'update' => true,
+        'delete' => true,
     ];
 
     public $display_names = [
-        'name'=>'Nombre',
-        'status.name' =>'Estátus'
+        'name' => 'Nombre',
+        'status.name' => 'Estátus'
     ];
 
     public $editable_fields = [
-        'name'=>'Nombre',
-        'email'=>'Email',
-        'password'=>'Contraseña',
-        'status.name' =>'Estátus'
+        'name' => 'Nombre',
+        'email' => 'Email',
+        'password' => 'Contraseña',
+        'status.name' => 'Estátus'
     ];
 
-    public $creatable_fields =[
-        'name'=>'Nombre',
-        'email'=>'Email',
-        'status.name' =>'Estátus'
+    public $creatable_fields = [
+        'name' => 'Nombre',
+        'email' => 'Email',
+        'status.name' => 'Estátus'
     ];
 
     public $withs = ['status'];
@@ -76,39 +76,58 @@ class User extends Authenticable implements MustVerifyEmail
     public $viewBag = ['status'];
 
     public $field_types = [
-        'name'=>'text',
-        'email'=>'text',
-        'password'=>'text',
-        'status.name'=> 'select'
+        'name' => 'text',
+        'email' => 'text',
+        'password' => 'text',
+        'status.name' => 'select'
     ];
 
-    public $update_rules =[
+    public $update_rules = [
         'name' => 'required|min:3|max:50',
         'email'  => 'required|min:3|max:50|email:rfc',
         'status'  => 'required'
     ];
 
-    public $store_rules =[
+    public $store_rules = [
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required','string', 'min:8', 'max:8'],
+        'password' => ['required', 'string', 'min:8', 'max:8'],
         'status'  => 'required'
     ];
 
 
-    public function beforeStore (){
+    public function beforeStore()
+    {
         $this->password = Hash::make($this->password);
         $this->email_verified_at = now();
     }
 
     public function afterStore()
     {
-        $role = Role::find(1);
+        $role = Role::find(2);
         $this->role()->attach($role);
     }
 
     public function role()
     {
-        return $this->belongsToMany(Role::class,'users_roles','id_user','id_role');
+        return $this->belongsToMany(Role::class, 'users_roles', 'id_user', 'id_role');
+    }
+
+    public function registerToken()
+    {
+        return $this->hasOne(RegisterToken::class, 'id_user', 'id');
+    }
+
+    public function authAcessToken()
+    {
+        return $this->hasMany('\AppModels\OauthAccessToken');
+    }
+
+
+    public function logout(): self
+    {
+        auth()->user()->token()->revoke();
+
+        return $this;
     }
 }
