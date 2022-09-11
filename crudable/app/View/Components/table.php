@@ -2,6 +2,7 @@
 
 namespace App\View\Components;
 
+use App\Models\Crudable;
 use Illuminate\View\Component;
 
 class Table extends Component
@@ -17,14 +18,13 @@ class Table extends Component
      *
      * @return void
      */
-    public function __construct($info,bool $create, bool $update, bool $delete )
+    public function __construct($info,Crudable $model )
     {
         $this->info = $info;
-        $this->create = $create;
-        $this->update = $update;
-        $this->delete = $delete;
-        if($this->info->count()>0)
-            $this->model = $info[0];
+        $this->create = $model->actions['create'];
+        $this->update = $model->actions['update'];
+        $this->delete = $model->actions['delete'];
+        $this->model = $model;
     }
 
     /**
@@ -34,6 +34,6 @@ class Table extends Component
      */
     public function render()
     {
-        return !empty($this->model) ? view('components.table'): "No hay info para mostrar";
+        return  view('components.table');
     }
 }

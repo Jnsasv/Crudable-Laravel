@@ -30,7 +30,18 @@
                                         id="{{ $key }}" value="{{ $model[$key] }}"
                                         aria-describedby="errors-{{ $keys[0] }}" />
                                 @break
-
+                                @case('number')
+                                    <input name="{{ $key }}" type="number" class="form-control"
+                                        id="{{ $key }}" value="{{ $model[$key] }}"
+                                        aria-describedby="errors-{{ $keys[0] }}" />
+                                @break
+                                @case('boolean')
+                                <div class="form-check form-switch">
+                                    <input name="{{ $key }}" class="form-check-input"
+                                    type="checkbox" role="switch" id="{{ $key }}" value="1"
+                                    aria-describedby="errors-{{ $keys[0] }}" {{$model[$key]==1?"checked":""}}>
+                                </div>
+                                @break
                                 @case('textarea')
                                     <textarea name="{{ $key }}" class="form-control" id="{{ $key }}" rows="3"
                                         aria-describedby="errors-{{ $keys[0] }}"> {{ $model[$key] }}</textarea>

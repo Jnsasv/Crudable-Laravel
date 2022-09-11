@@ -25,6 +25,18 @@
                 <x-nav-link :href="route('crud.index',['model'=>'appuser'])" :active="request()->routeIs('crud.index')">
                     Usuarios
                 </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'origen'])" :active="request()->routeIs('crud.index')">
+                    Origenes
+                </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'modalidad'])" :active="request()->routeIs('crud.index')">
+                    Modalidades
+                </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'milestone'])" :active="request()->routeIs('crud.index')">
+                    Premios
+                </x-nav-link>
+                <x-nav-link :href="route('crud.index',['model'=>'ruta'])" :active="request()->routeIs('crud.index')">
+                    Rutas
+                </x-nav-link>
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav">

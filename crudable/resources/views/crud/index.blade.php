@@ -4,7 +4,7 @@
     </x-slot>
 
     <div id="render-section">
-        <x-table :info="$data" :create="$model->actions['create']" :update="$model->actions['update']" :delete="$model->actions['delete']">
+        <x-table :info="$data" :model="$model">
         </x-table>
     </div>
     <script> var model = <?php echo json_encode($model->model_name); ?> ; </script>

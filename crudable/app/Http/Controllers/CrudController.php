@@ -9,12 +9,14 @@ use App\Models\AdminUser;
 use App\Models\AppUser;
 use App\Models\Status;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CrudController extends Controller
 {
 
     protected $model_name;
     protected $instance;
+    protected $returnJson;
 
     public function __construct(Request $request){
         $model = $request->route('model');
@@ -23,6 +25,7 @@ class CrudController extends Controller
 
         $this->instance = new $this->model_name();
 
+        $this->returnJson = (bool)$request->header("returnJson")??false;
     }
 
     public static $available_models = [
@@ -40,7 +43,7 @@ class CrudController extends Controller
      */
     public function index()
     {
-        return view('crud.index',['data' =>$this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' =>$this->instance ]);
+        return !$this->returnJson? view('crud.index',['data' =>$this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' =>$this->instance ]): ['data' =>$this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' =>$this->instance ];
     }
 
     /**
@@ -51,7 +54,7 @@ class CrudController extends Controller
     public function create()
     {
         $this->instance->create_mode = true;
-        return  view('crud.form',['model'=> $this->instance, 'viewBag'=>$this->getViewbag()]);
+        return !$this->returnJson? view('crud.form',['model'=> $this->instance, 'viewBag'=>$this->getViewbag()]) : ['model'=> $this->instance, 'viewBag'=>$this->getViewbag()];
     }
 
     /**
@@ -62,7 +65,9 @@ class CrudController extends Controller
      */
     public function store(string $model,  StoreRequest $request)
     {
+        Log::debug("model",$request->toArray());
         $data = $this->instance->renameRequestParams($request->all());
+        Log::debug("model",$data);
         $model =  new $this->model_name();
         $model= $model->fill($data);
         $model->beforeStore();
@@ -81,7 +86,7 @@ class CrudController extends Controller
     {
         $model =  $this->model_name::findOrFail($id);
 
-        return view('crud.form',['model'=> $model , 'viewBag' => $this->getViewbag()]);
+        return !$this->returnJson? view('crud.form',['model'=> $model , 'viewBag' => $this->getViewbag()]):['model'=> $model , 'viewBag' => $this->getViewbag()];
 
     }
 
@@ -104,7 +109,7 @@ class CrudController extends Controller
 
     public function delete(string $model,int $id){
         $model =  $this->model_name::findOrFail($id);
-        return view('crud.confirm',['model'=> $model]);
+        return !$this->returnJson? view('crud.confirm',['model'=> $model]):['model'=> $model];
     }
 
     /**
@@ -124,7 +129,7 @@ class CrudController extends Controller
 
     public function reactivate(string $model,int $id){
         $model =  $this->model_name::withTrashed()->find($id);
-        return view('crud.confirm',['model'=> $model,'reactivate'=>true]);
+        return !$this->returnJson? view('crud.confirm',['model'=> $model,'reactivate'=>true]):['model'=> $model,'reactivate'=>true];
     }
 
     /**
@@ -143,9 +148,9 @@ class CrudController extends Controller
     }
 
     protected function getViewbag(){
-        $viewBag = [];
         foreach ($this->instance->viewBag as  $toLoad) {
-            $viewBag[$toLoad] =  self::$available_models[$toLoad]::get();
+            $keys = explode('|', $toLoad);
+            $viewBag[$keys[0]] = count($keys)>1 ? self::$available_models[$keys[1]]::get() :  self::$available_models[$toLoad]::get();
         }
         return $viewBag;
     }
