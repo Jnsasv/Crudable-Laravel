@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Crudables;
 
+use App\Models\User;
 use App\Scopes\AdminUserScope;
 
 class AdminUser extends User{
 
     protected $table = 'users';
-    public $model_name ='adminuser';
+    public  $model_name ='adminuser';
     public $model_display_name ='Administradores';
 
     protected static function boot(){

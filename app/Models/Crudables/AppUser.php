@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Crudables;
 
+use App\Models\User;
 use App\Scopes\AppUserScope;
 
 class AppUser extends User{

@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
 
 
         $user = User::create([
-            'name' => 'Juan Casillas',
-            'email' => 'jns_asv@hotmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@mail.com',
             'password' => '$2y$10$HAMwue.6dmIRk3ghCOf02upe7NMX3cJnzp5wTwqmDUXZefdLdCrqe',
             'id_status' => 1,
             'email_verified_at' => now()
