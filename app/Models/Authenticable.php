@@ -17,4 +17,5 @@ class Authenticable extends Crudable implements
     CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+    public  $model_name ='authenticable';
 }

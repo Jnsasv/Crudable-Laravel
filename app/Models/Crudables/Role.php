@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Crudables;
 
+use App\Models\Crudable;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Role extends Crudable

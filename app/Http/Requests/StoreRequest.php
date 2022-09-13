@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Controllers\CrudController;
+use App\Providers\ModelsProvider;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
-        $instance = new CrudController::$available_models[$this->route('model')]();
+        $instance = new ModelsProvider::$available_models[$this->route('model')]();
         return $instance->store_rules;
     }
 }
