@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
-use App\Models\Crudable;
-use App\Models\Crudables\AdminUser;
-use App\Models\Crudables\AppUser;
-use App\Models\Crudables\Role;
+use App\Providers\ModelsProvider;
 use Illuminate\Http\Request;
+
 
 class CrudController extends Controller
 {
@@ -19,32 +17,19 @@ class CrudController extends Controller
 
     public function __construct(Request $request)
     {
+        if(count(ModelsProvider::$available_models )== 0){
+            ModelsProvider::getInstance();
+        }
         $model = $request->route('model');
 
-        $this->model_name = self::$available_models[$model];
+        $this->model_name = ModelsProvider::$available_models[$model];
 
         $this->instance = new $this->model_name();
 
-        $this->returnJson = (bool)$request->header("returnJson") ?? false;
+        $this->returnJson = $request->is('api/*');
     }
 
-    public static $available_models = [
-        'role' => Role::class,
-        'adminuser' => AdminUser::class,
-        'appuser' => AppUser::class
-    ];
 
-    public static function get_available_models(): array
-    {
-        $models   = collect(get_declared_classes())->filter(function ($model) {
-            return (substr($model, 0, 21) === 'App\Models\Crudables\\') && is_subclass_of($model, Crudable::class);
-        })->mapWithKeys(
-            function ($v) {
-                return [(new $v())->model_name => $v];
-            }
-        );
-        return $models->toArray();
-    }
     /**
      * Display a listing of the resource.
      *
@@ -52,7 +37,6 @@ class CrudController extends Controller
      */
     public function index()
     {
-        dump(self::get_available_models());
         return !$this->returnJson ? view('crud.index', ['data' => $this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' => $this->instance]) : ['data' => $this->model_name::withTrashed()->with($this->instance->withs)->paginate(10), 'model' => $this->instance];
     }
 
@@ -160,7 +144,7 @@ class CrudController extends Controller
     {
         foreach ($this->instance->viewBag as  $toLoad) {
             $keys = explode('|', $toLoad);
-            $viewBag[$keys[0]] = count($keys) > 1 ? self::$available_models[$keys[1]]::get() :  self::$available_models[$toLoad]::get();
+            $viewBag[$keys[0]] = count($keys) > 1 ? ModelsProvider::$available_models[$keys[1]]::get() :  ModelsProvider::$available_models[$toLoad]::get();
         }
         return $viewBag;
     }
