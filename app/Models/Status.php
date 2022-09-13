@@ -8,4 +8,5 @@ class Status extends Crudable
 {
     use HasFactory;
     protected $table='status';
+    public  $model_name ='status';
 }
