@@ -18,22 +18,44 @@ use App\Providers\ModelsProvider;
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     Dashboard
                 </x-nav-link>
-                @php
-
-                    if(count(ModelsProvider::$available_models)==0){
-                        ModelsProvider::getInstance();
-                    }
-                @endphp
-
-                @foreach (ModelsProvider::$available_models as $key=>$item)
-                    <x-nav-link :href="route('crud.index',['model'=>$key])" :active="request()->routeIs('crud.index')">
-                        {{(new $item())->model_display_name}}
-                    </x-nav-link>
-                @endforeach
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav">
-                    <x-dropdown align="left">
+                    @php
+
+                        if (count(ModelsProvider::$available_models) == 0) {
+                            ModelsProvider::getInstance();
+                        }
+                    @endphp
+
+                    @if (count(ModelsProvider::$available_models) > 0)
+                        <x-dropdown id="crud-dropdown" :active="request()->routeIs('crud.index')" toggle_side='left'>
+                            <x-slot name="trigger">
+                                Catalogos
+                            </x-slot>
+                            <x-slot name="content">
+                                @foreach (ModelsProvider::$available_models as $key => $item)
+                                    @php
+                                        $currentmodel = new $item();
+                                        $active = request()->route('model') == $key ? 'active' : '';
+                                    @endphp
+                                    @if ($currentmodel->model_display_name !== '')
+                                        <li>
+                                            <a class="dropdown-item {{ $active }}"
+                                                href="{{ route('crud.index', ['model' => $key]) }}">
+                                                {{ $currentmodel->model_display_name }}</a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            </x-slot>
+                        </x-dropdown>
+                </ul>
+
+                @endif
+            </div>
+            <div class="d-flex">
+                <ul class="navbar-nav">
+                    <x-dropdown id="logout-dropdown" :active="false">
                         <x-slot name="trigger">
                             {{ Auth::user()->name }}
                         </x-slot>
@@ -43,7 +65,8 @@ use App\Providers\ModelsProvider;
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
 
-                                <x-dropdown-link class="dropdown-item" :href="route('logout')" onclick="event.preventDefault();
+                                <x-dropdown-link class="dropdown-item" :href="route('logout')"
+                                    onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                     {{ __('Log Out') }}
                                 </x-dropdown-link>
