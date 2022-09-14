@@ -11,10 +11,32 @@ use Illuminate\Http\Request;
 class CrudController extends Controller
 {
 
+    /**
+     * Name of the model current used
+     *
+     * @var string
+    */
     protected $model_name;
+
+    /**
+     * instance of the model current used
+     *
+     * @var \App\Models\Crudable
+    */
     protected $instance;
+
+    /**
+     * if the response to be returned is a json or a view
+     *
+     * @var bool
+    */
     protected $returnJson;
 
+    /**
+     * Controller Constructor
+     *
+     * @param Request $request
+    */
     public function __construct(Request $request)
     {
         if(count(ModelsProvider::$available_models )== 0){
@@ -48,12 +70,13 @@ class CrudController extends Controller
     public function create()
     {
         $this->instance->create_mode = true;
-        return !$this->returnJson ? view('crud.form', ['model' => $this->instance, 'viewBag' => $this->getViewbag()]) : ['model' => $this->instance, 'viewBag' => $this->getViewbag()];
+        return !$this->returnJson ? view('crud.form', ['model' => $this->instance, 'view_bag' => $this->getViewbag()]) : ['model' => $this->instance, 'view_bag' => $this->getViewbag()];
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param  string $model  model name
      * @param  \App\Http\Requests\StoreRequest  $request
      * @return \Illuminate\Http\Response
      */
@@ -71,21 +94,22 @@ class CrudController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Crudable  $role
+     * @param  string $model  model name
+     * @param  int $id  id to edit
      * @return \Illuminate\Http\Response
      */
     public function edit(string $model, int $id)
     {
         $model =  $this->model_name::findOrFail($id);
 
-        return !$this->returnJson ? view('crud.form', ['model' => $model, 'viewBag' => $this->getViewbag()]) : ['model' => $model, 'viewBag' => $this->getViewbag()];
+        return !$this->returnJson ? view('crud.form', ['model' => $model, 'view_bag' => $this->getViewbag()]) : ['model' => $model, 'view_bag' => $this->getViewbag()];
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateRoleRequest  $request
-     * @param  \App\Models\Crudable  $model
+     * @param  string $model model name
+     * @param  \App\Http\Requests\UpdateRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function update(string $model, UpdateRequest $request)
@@ -98,6 +122,13 @@ class CrudController extends Controller
         return $model;
     }
 
+    /**
+     * Show the form for cofirm the deleting the specified resource.
+     *
+     * @param  string $model  model name
+     * @param  int $id  id to delete
+     * @return \Illuminate\Http\Response
+     */
     public function delete(string $model, int $id)
     {
         $model =  $this->model_name::findOrFail($id);
@@ -107,7 +138,8 @@ class CrudController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Crudable  $role
+     * @param  string $model  model name
+     * @param   Request  $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(string $model, Request $request)
@@ -119,6 +151,13 @@ class CrudController extends Controller
         return $model;
     }
 
+    /**
+     * reactivate the specified resource.
+     *
+     * @param  string $model  model name
+     * @param  int $id  id to create
+     * @return \Illuminate\Http\Response
+     */
     public function reactivate(string $model, int $id)
     {
         $model =  $this->model_name::withTrashed()->find($id);
@@ -128,7 +167,8 @@ class CrudController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Crudable  $role
+     * @param  string $model  model name
+     * @param   Request  $request
      * @return \Illuminate\Http\Response
      */
     public function activate(string $model, Request $request)
@@ -140,12 +180,17 @@ class CrudController extends Controller
         return $model;
     }
 
+    /**
+     * get the viewbagfor selects according to the current model.
+     *
+     * @return array
+     */
     protected function getViewbag()
     {
-        foreach ($this->instance->viewBag as  $toLoad) {
+        foreach ($this->instance->view_bag as  $toLoad) {
             $keys = explode('|', $toLoad);
-            $viewBag[$keys[0]] = count($keys) > 1 ? ModelsProvider::$available_models[$keys[1]]::get() :  ModelsProvider::$available_models[$toLoad]::get();
+            $view_bag[$keys[0]] = count($keys) > 1 ? ModelsProvider::$available_models[$keys[1]]::get() :  ModelsProvider::$available_models[$toLoad]::get();
         }
-        return $viewBag;
+        return $view_bag;
     }
 }

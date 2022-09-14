@@ -49,9 +49,9 @@ class User extends Authenticable implements MustVerifyEmail
     public $model_display_name = 'Usuarios';
 
     public $actions = [
-        'create' => true,
-        'update' => true,
-        'delete' => true,
+        'create',
+        'update',
+        'delete',
     ];
 
     public $display_names = [
@@ -74,7 +74,7 @@ class User extends Authenticable implements MustVerifyEmail
 
     public $withs = ['status'];
 
-    public $viewBag = ['status'];
+    public $view_bag = ['status'];
 
     public $field_types = [
         'name' => 'text',

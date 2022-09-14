@@ -21,9 +21,9 @@ class Table extends Component
     public function __construct($info,Crudable $model )
     {
         $this->info = $info;
-        $this->create = $model->actions['create'];
-        $this->update = $model->actions['update'];
-        $this->delete = $model->actions['delete'];
+        $this->create = in_array('create', $model->actions);
+        $this->update = in_array('update', $model->actions);
+        $this->delete = in_array('delete', $model->actions);
         $this->model = $model;
     }
 
