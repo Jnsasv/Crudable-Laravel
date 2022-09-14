@@ -15,9 +15,9 @@ class Role extends Crudable
     public $model_display_name ='Roles';
 
     public $actions = [
-        'create' =>true,
-        'update' =>true,
-        'delete' =>true,
+        'create',
+        'update',
+        'delete',
     ];
 
     protected $fillable =  [
@@ -46,7 +46,7 @@ class Role extends Crudable
 
     public $withs = ['status'];
 
-    public $viewBag = ['status'];
+    public $view_bag = ['status'];
 
     public $field_types = [
         'name'=>'text',

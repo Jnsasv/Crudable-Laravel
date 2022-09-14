@@ -6,21 +6,34 @@ use App\Models\Crudable;
 class ModelsProvider
 {
 
-    public static array $available_models   = [];
+    /**
+     * available crudable models
+     *
+     * @var array
+    */
+    public static $available_models   = [];
+
+    /**
+     * singleton current instance
+     *
+     * @var ModelProvider
+    */
     private static $instance;
 
+    /**
+     * Class Constructor
+     *
+    */
     protected function __construct()
     {
     }
-    protected function __clone()
-    {
-    }
-    public function __wakeup()
-    {
-        throw new \Exception("Cannot unserialize a singleton.");
-    }
 
-    public static function getInstance(): ModelsProvider
+    /**
+     * return singleton to load only a time the available models
+     *
+     * @return ModelsProvider
+    */
+    public static function getInstance()
     {
         if (!self::$instance instanceof self) {
             self::$available_models = self::load_available_models();
@@ -31,6 +44,11 @@ class ModelsProvider
     }
 
 
+    /**
+     * load the current Crudable Models
+     *
+     * @return array
+    */
     protected static function load_available_models()
     {
         $composer  = require base_path('/vendor/autoload.php');

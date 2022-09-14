@@ -11,11 +11,16 @@
                 </div>
 
                 <form class="mt-3" novalidate id="crud-form" action="post">
+
                     @csrf
+
                     @if (!$model->create_mode)
                         @method('put')
                     @endif
+
                     <input type="hidden" name="id" value="{{ $model->create_mode ? 0 : $model->id }}" />
+
+                    {{-- iterate in to build de records --}}
                     @foreach ($model->create_mode ? $model->editable_fields : $model->creatable_fields as $key => $item)
                          @php
                             $keys = explode('.', $key);
@@ -24,6 +29,7 @@
                             <label for="{{ count($keys) > 1 ? $keys[0] : $key }}"
                                 class="form-label">{{ $item }}</label>
 
+                            {{-- build components according fieldtype --}}
                             @switch($model->field_types[$key])
                                 @case('text')
                                     <input name="{{ $key }}" type="text" class="form-control"
@@ -53,8 +59,8 @@
                                         <option disabled value="" {{ $model->create_mode ? 'selected' : '' }}>Seleccione una
                                             opción
                                         </option>
-                                        @if (count($keys) > 1 && isset($viewBag[$keys[0]]) && $keys[0] != 'status')
-                                            @foreach ($viewBag[$keys[0]] as $option)
+                                        @if (count($keys) > 1 && isset($view_bag[$keys[0]]) && $keys[0] != 'status')
+                                            @foreach ($view_bag[$keys[0]] as $option)
                                                 <option
                                                     {{ !$model->create_mode && $model[$keys[0]]->id == $option->id ? 'selected' : '' }}
                                                     value="{{ $option->id }}">{{ $option->name }}</option>
